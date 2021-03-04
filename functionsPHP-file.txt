@@ -1,0 +1,74 @@
+
+// Shortcode - Catalogue
+// Work like this:
+// [catshow page="CurrentPageName]
+// Where: "CurrentPageName" is variable "page" in the array 
+function cat_show_shortcode( $atts ) {
+
+	$catPages = shortcode_atts( array(
+		array(
+			'page' => 'Home',
+			'group' =>' ',
+			'pgurl' =>' ',
+			'picurl'=>'/wp-content/uploads/2020/06/MainPage.jpg'
+		),
+		array(
+			'page' => 'Group One',
+			'group' =>'First Group',
+			'pgurl' =>'/group-one/',
+			'picurl'=>'/wp-content/uploads/2020/05/GroupPic1.jpg'
+		),
+		array(
+			'page' => 'Group Two',
+			'group' =>'Second Group',
+			'pgurl' =>'/group-two/',
+			'picurl'=>'/wp-content/uploads/2020/05/GroupPic2.jpg'
+		),
+		array(
+			'page' => 'Group Three',
+			'group' =>'Third Group',
+			'pgurl' =>'/group-three/',
+			'picurl'=>'/wp-content/uploads/2020/05/GroupPic3.jpg'
+		),		
+
+/* list continues...
+   ...and at the end, repeat 1st item to go back to the Main page*/
+
+		array(
+			'page' => 'Home',
+			'group' =>' ',
+			'pgurl' =>' ',
+			'picurl'=>'/wp-content/uploads/2020/06/MainPage.jpg'
+		)		
+	), $atts);
+
+	$url_start_part = 'https://mywebsite.com';	
+	
+	$element_pos = array_search($atts['page'], array_column($catPages, 'page'));
+
+// output definition	
+	$output = '<div class="items columns-3 flex">';
+	$output .= '<div style="text-align: center;">';
+	$output .= '<p style="text-align: center;"><a href="'.$url_start_part. $catPages[$element_pos-1]['pgurl']. '"><span class="btnNavBtm" style="padding: 1em!important; border-radius: 10px!important;">';
+	$output .= '<span style="font-size: 1em; padding: 0.1em;">'. $catPages[$element_pos-1]['page'].'<br/>'.$catPages[$element_pos-1]['group']. '</span></span></a></p>';
+	$output .='</div>';
+	$output .='<div style="text-align: center;">';
+/*	$output .='<p style="text-align: center;"><a href="https://melnorthey.com/"><span class="btnNavBtm" style="padding: 1em !important; border-radius: 10px!important;"><i class="fa fa-book-open"></i>';
+	$output .='<span style="font-size: 1em; padding: 0.1em;">Lamps and Posts</span></span></a></p>';*/
+	$output .='</div>';
+	$output .='<div style="text-align: center;">';
+	$output .='<p style="text-align: center;"><a href="'.$url_start_part. $catPages[$element_pos+1]['pgurl']. '"><span class="btnNavBtm" style="padding: 1em !important; border-radius: 10px!important;">';
+	$output .='<span style="font-size: 1em; padding: 0.1em;">'. $catPages[$element_pos+1]['page'].'<br/>'. $catPages[$element_pos+1]['group']. '</span></span></a></p>';
+	$output .='</div>';
+	$output .='</div>';
+
+    return $output;
+
+}
+
+/* Current Year - for footer */
+add_shortcode( 'catshow', 'cat_show_shortcode' );
+function getCurrentYear() {
+	return date('Y');
+}
+add_shortcode('current_year', 'getCurrentYear');
